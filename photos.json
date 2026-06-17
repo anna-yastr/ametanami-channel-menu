@@ -1,0 +1,37 @@
+{
+  "main": "AgACAgIAAxkBAAMYajJsHlzJ__GDgnZgNsrOktPyywIAAoYbaxukG5lJhiih_hzWln0BAAMCAAN3AAM8BA",
+  "stickers": [
+    {
+      "file_id": "CgACAgIAAxkBAANKajKb8u5WNJI4X4HObW-gyDppM3AAAvahAAItTZlJH3e-CjlHBHg8BA",
+      "type": "animation"
+    },
+    {
+      "file_id": "CgACAgIAAxkBAANMajKcAAFVAUrEQpi0O_N6WEMFf5EFAAL3oQACLU2ZSaDMQ-wSQtuWPAQ",
+      "type": "animation"
+    }
+  ],
+  "comics": [
+    {
+      "file_id": "CgACAgIAAxkBAANRajKi-4zwWrYAAd-8H4N1nGQpAAGdHQACNqIAAi1NmUk6e5XpSWEMbTwE",
+      "type": "animation"
+    }
+  ],
+  "art": [
+    {
+      "file_id": "CgACAgIAAxkBAAIBJ2ozB8GL1City73iR6OUNgMQEvABAAKhpQACLU2ZSbtmZjXfLEkgPAQ",
+      "type": "animation"
+    }
+  ],
+  "personal": [
+    {
+      "file_id": "AgACAgIAAxkBAAIBKWozCkBKEujhWRkr7ZvmaFq0JmkMAAIZHmsbLU2ZSWpleH4b9Fh9AQADAgADeQADPAQ",
+      "type": "photo"
+    }
+  ],
+  "games": [
+    {
+      "file_id": "AgACAgIAAxkBAAPIajLOUAu2IB4WXRH7vFFXB_xYf1YAAgwcaxstTZlJ-RqSyIpPl84BAAMCAAN5AAM8BA",
+      "type": "photo"
+    }
+  ]
+}

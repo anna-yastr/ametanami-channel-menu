@@ -1,0 +1,11 @@
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+main_menu = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="✦ Стикеры", callback_data="stickers")],
+        [InlineKeyboardButton(text="✦ Комиксы", callback_data="comics")],
+        [InlineKeyboardButton(text="✦ Арт подборки", callback_data="art")],
+        [InlineKeyboardButton(text="✦ Личное", callback_data="personal")],
+        [InlineKeyboardButton(text="✦ Игры", callback_data="games")],
+    ]
+)
