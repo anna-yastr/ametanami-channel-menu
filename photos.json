@@ -3,23 +3,23 @@
   "stickers": [
     {
       "file_id": "CgACAgIAAxkBAANKajKb8u5WNJI4X4HObW-gyDppM3AAAvahAAItTZlJH3e-CjlHBHg8BA",
-      "type": "animation"
+      "type": "video"
     },
     {
       "file_id": "CgACAgIAAxkBAANMajKcAAFVAUrEQpi0O_N6WEMFf5EFAAL3oQACLU2ZSaDMQ-wSQtuWPAQ",
-      "type": "animation"
+      "type": "video"
     }
   ],
   "comics": [
     {
       "file_id": "CgACAgIAAxkBAANRajKi-4zwWrYAAd-8H4N1nGQpAAGdHQACNqIAAi1NmUk6e5XpSWEMbTwE",
-      "type": "animation"
+      "type": "video"
     }
   ],
   "art": [
     {
-      "file_id": "CgACAgIAAxkBAAIBJ2ozB8GL1City73iR6OUNgMQEvABAAKhpQACLU2ZSbtmZjXfLEkgPAQ",
-      "type": "animation"
+      "file_id": "AgACAgIAAxkBAAIGwWo0FF5hV1_ngl55CFVOgFrh0nOdAAKAIGsbMfSgSanAtPNkyuuHAQADAgADeQADPAQ",
+      "type": "photo"
     }
   ],
   "personal": [
@@ -33,5 +33,12 @@
       "file_id": "AgACAgIAAxkBAAPIajLOUAu2IB4WXRH7vFFXB_xYf1YAAgwcaxstTZlJ-RqSyIpPl84BAAMCAAN5AAM8BA",
       "type": "photo"
     }
-  ]
+  ],
+  "animation": [
+    {
+      "file_id": "BAACAgIAAxkBAAIGv2o0FDKqMp1uXffZwMVB1PAzQw_XAAKFqwACMfSgSeqokJhCnwXjPAQ",
+      "type": "video"
+    }
+  ],
+  "socials": []
 }

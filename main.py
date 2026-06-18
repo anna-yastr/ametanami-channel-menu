@@ -30,15 +30,17 @@ open_menu_kb = ReplyKeyboardMarkup(
 
 PHOTOS_FILE = Path("photos.json")
 POSTS_FILE = Path("posts.json")
-SECTIONS = {"stickers", "comics", "art", "personal", "games"}
+SECTIONS = {"stickers", "comics", "art", "animation", "personal", "games", "socials"}
 
 CAPTIONS = {
-    "main":     "Приветы! Я Ame Tanami и добро пожаловать в мой творческий уголок ^^ Здесь ты найдёшь разное ✦ Просто нажми на раздел, который тебя интересует ✦",
+    "main":     "Приветы! Я Ame Tanami и добро пожаловать в мой творческий уголок ^^ Здесь ты найдёшь мои комиксы арты и даже игру ✦ Просто нажми на раздел, который тебя интересует ✦",
     "stickers": "✦ Стикеры",
     "comics":   "✦ Мини-комиксы",
-    "art":      "✦ Арт подборки",
-    "personal": "✦ Личное",
+    "art":       "✦ Арт подборки",
+    "animation": "✦ Анимации",
+    "personal":  "✦ Личное",
     "games":    "✦ Игры",
+    "socials":  "✦ Другие соцсети",
 }
 
 
@@ -142,6 +144,34 @@ def build_submenu_keyboard(section: str, post_idx: int) -> InlineKeyboardMarkup:
         else:
             rows.append([InlineKeyboardButton(text=f"✦ {child['title']}", callback_data=f"subpost_{section}_{post_idx}_{i}")])
     rows.append([InlineKeyboardButton(text="← назад", callback_data=section)])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def build_subsubmenu_keyboard(section: str, post_idx: int, child_idx: int) -> InlineKeyboardMarkup:
+    grandchildren = posts[section][post_idx]["children"][child_idx].get("children", [])
+    rows = []
+    for i, gc in enumerate(grandchildren):
+        if gc.get("url"):
+            rows.append([InlineKeyboardButton(text=f"✦ {gc['title']}", url=gc["url"])])
+        else:
+            rows.append([InlineKeyboardButton(text=f"✦ {gc['title']}", callback_data=f"subsubpost_{section}_{post_idx}_{child_idx}_{i}")])
+    rows.append([InlineKeyboardButton(text="← назад", callback_data=f"submenu_{section}_{post_idx}")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def build_subsubpost_keyboard(section: str, post_idx: int, child_idx: int, grandchild_idx: int, img_idx: int) -> InlineKeyboardMarkup:
+    gc = posts[section][post_idx]["children"][child_idx]["children"][grandchild_idx]
+    images = gc.get("images", [])
+    rows = []
+    if len(images) > 1:
+        prev_i = (img_idx - 1) % len(images)
+        next_i = (img_idx + 1) % len(images)
+        rows.append([
+            InlineKeyboardButton(text="◁", callback_data=f"subsubpostview_{section}_{post_idx}_{child_idx}_{grandchild_idx}_{prev_i}"),
+            InlineKeyboardButton(text=f"{img_idx + 1} / {len(images)}", callback_data="noop"),
+            InlineKeyboardButton(text="▷", callback_data=f"subsubpostview_{section}_{post_idx}_{child_idx}_{grandchild_idx}_{next_i}"),
+        ])
+    rows.append([InlineKeyboardButton(text="← назад", callback_data=f"subsubmenu_{section}_{post_idx}_{child_idx}")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -687,6 +717,14 @@ async def menu_handler(callback: CallbackQuery):
         child_idx = int(parts[3])
         child = posts[section][post_idx]["children"][child_idx]
 
+        if child.get("children"):
+            keyboard = build_subsubmenu_keyboard(section, post_idx, child_idx)
+            if has_media(callback.message):
+                await callback.message.edit_caption(caption=child["title"], reply_markup=keyboard)
+            else:
+                await callback.message.edit_text(text=child["title"], reply_markup=keyboard)
+            return
+
         if child.get("channel") and child.get("ids"):
             full_id = int(f"-100{child['channel']}")
             ids = child["ids"]
@@ -725,6 +763,54 @@ async def menu_handler(callback: CallbackQuery):
         entry = normalize(images[img_idx])
         keyboard = build_subpost_keyboard(section, post_idx, child_idx, img_idx)
         await callback.message.edit_media(media=make_input_media(entry, child["title"]), reply_markup=keyboard)
+        return
+
+    if key.startswith("subsubmenu_"):
+        parts = key.split("_")
+        section = parts[1]
+        post_idx = int(parts[2])
+        child_idx = int(parts[3])
+        child = posts[section][post_idx]["children"][child_idx]
+        keyboard = build_subsubmenu_keyboard(section, post_idx, child_idx)
+        if has_media(callback.message):
+            await callback.message.edit_caption(caption=child["title"], reply_markup=keyboard)
+        else:
+            await callback.message.edit_text(text=child["title"], reply_markup=keyboard)
+        return
+
+    if key.startswith("subsubpost_"):
+        parts = key.split("_")
+        section = parts[1]
+        post_idx = int(parts[2])
+        child_idx = int(parts[3])
+        grandchild_idx = int(parts[4])
+        gc = posts[section][post_idx]["children"][child_idx]["children"][grandchild_idx]
+        images = gc.get("images", [])
+        if not images:
+            await callback.answer("картинок пока нет", show_alert=True)
+            return
+        entry = normalize(images[0])
+        keyboard = build_subsubpost_keyboard(section, post_idx, child_idx, grandchild_idx, 0)
+        if has_media(callback.message):
+            await callback.message.edit_media(media=make_input_media(entry, gc["title"]), reply_markup=keyboard)
+        else:
+            await callback.message.edit_caption(caption=gc["title"], reply_markup=keyboard)
+        return
+
+    if key.startswith("subsubpostview_"):
+        parts = key.split("_")
+        section = parts[1]
+        post_idx = int(parts[2])
+        child_idx = int(parts[3])
+        grandchild_idx = int(parts[4])
+        img_idx = int(parts[5])
+        gc = posts[section][post_idx]["children"][child_idx]["children"][grandchild_idx]
+        images = gc.get("images", [])
+        if not images or img_idx >= len(images):
+            return
+        entry = normalize(images[img_idx])
+        keyboard = build_subsubpost_keyboard(section, post_idx, child_idx, grandchild_idx, img_idx)
+        await callback.message.edit_media(media=make_input_media(entry, gc["title"]), reply_markup=keyboard)
         return
 
 
