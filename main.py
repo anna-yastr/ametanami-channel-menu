@@ -30,6 +30,7 @@ open_menu_kb = ReplyKeyboardMarkup(
 
 PHOTOS_FILE = Path("photos.json")
 POSTS_FILE = Path("posts.json")
+STATS_FILE = Path("stats.json")
 SECTIONS = {"stickers", "comics", "art", "animation", "personal", "games", "socials"}
 
 CAPTIONS = {
@@ -42,6 +43,16 @@ CAPTIONS = {
     "games":    "✦ Игры",
     "socials":  "✦ Другие соцсети",
 }
+
+
+def load_stats() -> dict:
+    if STATS_FILE.exists():
+        return json.loads(STATS_FILE.read_text(encoding="utf-8"))
+    return {"starts": 0, "users": [], "sections": {s: 0 for s in SECTIONS}}
+
+
+def save_stats(data: dict) -> None:
+    STATS_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def load_photos() -> dict:
@@ -66,6 +77,7 @@ def save_posts(data: dict) -> None:
 
 photos = load_photos()
 posts = load_posts()
+stats = load_stats()
 
 _mg_buffer: dict[str, list] = {}
 _mg_tasks: dict[str, asyncio.Task] = {}
@@ -542,8 +554,26 @@ async def show_main_menu(message: Message) -> None:
             await message.answer(CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML")
 
 
+@dp.message(lambda m: m.from_user.id == ADMIN_ID and m.text == "/stats")
+async def cmd_stats(message: Message):
+    total_users = len(stats.get("users", []))
+    starts = stats.get("starts", 0)
+    sections_data = stats.get("sections", {})
+    lines = [f"<b>✦ Статистика</b>", f"Пользователей: <b>{total_users}</b>", f"Открытий бота: <b>{starts}</b>", ""]
+    for section in sorted(SECTIONS):
+        count = sections_data.get(section, 0)
+        label = CAPTIONS.get(section, section)
+        lines.append(f"{label}: <b>{count}</b>")
+    await message.reply("\n".join(lines), parse_mode="HTML")
+
+
 @dp.message(CommandStart())
 async def start(message: Message):
+    uid = message.from_user.id
+    stats["starts"] = stats.get("starts", 0) + 1
+    if uid not in stats["users"]:
+        stats["users"].append(uid)
+    save_stats(stats)
     await message.answer("✦", reply_markup=open_menu_kb)
     await show_main_menu(message)
 
@@ -589,6 +619,8 @@ async def menu_handler(callback: CallbackQuery):
         return
 
     if key in SECTIONS:
+        stats["sections"][key] = stats["sections"].get(key, 0) + 1
+        save_stats(stats)
         entry = get_media(key, 0)
         keyboard = build_section_keyboard(key, 0)
         if entry and has_media(callback.message):
