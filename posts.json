@@ -64,16 +64,56 @@
   ],
   "animation": [
     {
-      "title": "Девочка-ромашка",
-      "url": "https://t.me/ame_tanami/1261"
+      "title": "Анимации",
+      "children": [
+        {
+          "title": "Девочка-ромашка",
+          "url": "https://t.me/ame_tanami/1261"
+        },
+        {
+          "title": "Фан-анимация по Красному бедствию",
+          "url": "https://t.me/ame_tanami/1189"
+        },
+        {
+          "title": "Фан-анимация по Субстанции",
+          "url": "https://t.me/ame_tanami/766"
+        }
+      ]
     },
     {
-      "title": "Фан-анимация по Красному бедствию",
-      "url": "https://t.me/ame_tanami/1189"
+      "title": "Спидпейнты",
+      "children": [
+        
+        {
+          "title": "Ведьма по ведьмарту 2025",
+          "url": "https://t.me/ame_tanami/918"
+        },
+        {
+          "title": "Ведьма по Witchtober 2024",
+          "url": "https://t.me/ame_tanami/727"
+        }
+      ]
     },
     {
-      "title": "Фан-анимация по Субстанции",
-      "url": "https://t.me/ame_tanami/766"
+      "title": "Обзоры скетчбуков",
+      "children": [
+        {
+          "title": "Первый микро-скетчбук 2025",
+          "url": "https://t.me/ame_tanami/944"
+        },
+        {
+          "title": "Второй микро-скетчбук 2025 с фанартами",
+          "url": "https://t.me/ame_tanami/996"
+        }
+      ]
+    }
+  ],
+  
+  "games": [
+    {
+      "title": "Cats flood",
+      "url": "https://anna-yastr.github.io/flood-of-cats/",
+      "caption": "Кликайте на котиков, пока они не упали в воду. Игра на время, так что поспешите!"
     }
   ],
   "personal": [
@@ -81,45 +121,38 @@
       "title": "Записки домоседа вне дома",
       "children": [
         {
-          "title": "Грузия. Сатаплия",
-          "url": "https://t.me/ame_tanami/32"
-        },
-        {
-          "title": "Грузия. Пещера Прометея",
-          "url": "https://t.me/ame_tanami/119"
-        },
-        {
-          "title": "Грузия. Каньон Окаце",
-          "url": "https://t.me/ame_tanami/62"
-        },
-        {
-          "title": "Грузия. Каньон Мартвили",
-          "url": "https://t.me/ame_tanami/81"
-        },
-        {
-          "title": "Париж 2025",
-          "url": "https://t.me/ame_tanami/1092"
-        },
-        {
-          "title": "Парижские катакомбы и кладбище 2025",
-          "url": "https://t.me/ame_tanami/1098"
+          "title": "Хорватия 2026",
+          "url": "https://t.me/ame_tanami/1271"
         },
         {
           "title": "Хорватия 2025",
           "url": "https://t.me/ame_tanami/1113"
         },
         {
-          "title": "Хорватия 2026",
-          "url": "https://t.me/ame_tanami/1271"
+          "title": "Парижские катакомбы и кладбище 2025",
+          "url": "https://t.me/ame_tanami/1098"
+        },
+        {
+          "title": "Париж 2025",
+          "url": "https://t.me/ame_tanami/1092"
+        },
+        {
+          "title": "Грузия. Каньон Мартвили",
+          "url": "https://t.me/ame_tanami/81"
+        },
+        {
+          "title": "Грузия. Каньон Окаце",
+          "url": "https://t.me/ame_tanami/62"
+        },
+        {
+          "title": "Грузия. Пещера Прометея",
+          "url": "https://t.me/ame_tanami/119"
+        },
+        {
+          "title": "Грузия. Сатаплия",
+          "url": "https://t.me/ame_tanami/32"
         }
       ]
-    }
-  ],
-  "games": [
-    {
-      "title": "Cats flood",
-      "url": "https://anna-yastr.github.io/flood-of-cats/",
-      "caption": "Кликайте на котиков, пока они не упали в воду. Игра на время, так что поспешите!"
     }
   ],
   "socials": [

@@ -33,11 +33,11 @@ POSTS_FILE = Path("posts.json")
 SECTIONS = {"stickers", "comics", "art", "animation", "personal", "games", "socials"}
 
 CAPTIONS = {
-    "main":     "Приветы! Я Ame Tanami и добро пожаловать в мой творческий уголок ^^ Здесь ты найдёшь мои комиксы арты и даже игру ✦ Просто нажми на раздел, который тебя интересует ✦",
+    "main":     "Приветы! Я Ame Tanami, и ты попал в библиотеку моего творчества ✦ Тут можно побродить по комиксам, арт-подборкам, анимациям, стикерам и даже играм ^^ А всё остальное продолжает жить в <a href=\"https://t.me/ame_tanami\">✦канале✦</a>",
     "stickers": "✦ Стикеры",
     "comics":   "✦ Мини-комиксы",
     "art":       "✦ Арт подборки",
-    "animation": "✦ Анимации",
+    "animation": "✦ Анимации и видео",
     "personal":  "✦ Личное",
     "games":    "✦ Игры",
     "socials":  "✦ Другие соцсети",
@@ -90,10 +90,10 @@ def get_media(section: str, index: int = 0) -> dict | None:
 def make_input_media(entry: dict, caption: str):
     cap = entry.get("caption", caption)
     if entry["type"] == "animation":
-        return InputMediaAnimation(media=entry["file_id"], caption=cap)
+        return InputMediaAnimation(media=entry["file_id"], caption=cap, parse_mode="HTML")
     if entry["type"] == "video":
-        return InputMediaVideo(media=entry["file_id"], caption=cap)
-    return InputMediaPhoto(media=entry["file_id"], caption=cap)
+        return InputMediaVideo(media=entry["file_id"], caption=cap, parse_mode="HTML")
+    return InputMediaPhoto(media=entry["file_id"], caption=cap, parse_mode="HTML")
 
 
 def build_section_keyboard(section: str, img_idx: int = 0) -> InlineKeyboardMarkup:
@@ -116,7 +116,7 @@ def build_section_keyboard(section: str, img_idx: int = 0) -> InlineKeyboardMark
         else:
             rows.append([InlineKeyboardButton(text=f"✦ {p['title']}", callback_data=f"showpost_{section}_{i}")])
 
-    rows.append([InlineKeyboardButton(text="← назад", callback_data="back")])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data="back")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -131,7 +131,7 @@ def build_post_keyboard(section: str, post_idx: int, img_idx: int) -> InlineKeyb
             InlineKeyboardButton(text=f"{img_idx + 1} / {len(images)}", callback_data="noop"),
             InlineKeyboardButton(text="▷", callback_data=f"postview_{section}_{post_idx}_{next_i}"),
         ])
-    rows.append([InlineKeyboardButton(text="← назад", callback_data=section)])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data=section)])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -143,7 +143,7 @@ def build_submenu_keyboard(section: str, post_idx: int) -> InlineKeyboardMarkup:
             rows.append([InlineKeyboardButton(text=f"✦ {child['title']}", url=child["url"])])
         else:
             rows.append([InlineKeyboardButton(text=f"✦ {child['title']}", callback_data=f"subpost_{section}_{post_idx}_{i}")])
-    rows.append([InlineKeyboardButton(text="← назад", callback_data=section)])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data=section)])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -155,7 +155,7 @@ def build_subsubmenu_keyboard(section: str, post_idx: int, child_idx: int) -> In
             rows.append([InlineKeyboardButton(text=f"✦ {gc['title']}", url=gc["url"])])
         else:
             rows.append([InlineKeyboardButton(text=f"✦ {gc['title']}", callback_data=f"subsubpost_{section}_{post_idx}_{child_idx}_{i}")])
-    rows.append([InlineKeyboardButton(text="← назад", callback_data=f"submenu_{section}_{post_idx}")])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data=f"submenu_{section}_{post_idx}")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -171,7 +171,7 @@ def build_subsubpost_keyboard(section: str, post_idx: int, child_idx: int, grand
             InlineKeyboardButton(text=f"{img_idx + 1} / {len(images)}", callback_data="noop"),
             InlineKeyboardButton(text="▷", callback_data=f"subsubpostview_{section}_{post_idx}_{child_idx}_{grandchild_idx}_{next_i}"),
         ])
-    rows.append([InlineKeyboardButton(text="← назад", callback_data=f"subsubmenu_{section}_{post_idx}_{child_idx}")])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data=f"subsubmenu_{section}_{post_idx}_{child_idx}")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -187,7 +187,7 @@ def build_subpost_keyboard(section: str, post_idx: int, child_idx: int, img_idx:
             InlineKeyboardButton(text=f"{img_idx + 1} / {len(images)}", callback_data="noop"),
             InlineKeyboardButton(text="▷", callback_data=f"subpostview_{section}_{post_idx}_{child_idx}_{next_i}"),
         ])
-    rows.append([InlineKeyboardButton(text="← назад", callback_data=f"submenu_{section}_{post_idx}")])
+    rows.append([InlineKeyboardButton(text="✦ ← назад", callback_data=f"submenu_{section}_{post_idx}")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -522,15 +522,15 @@ async def show_main_menu(message: Message) -> None:
     if entry:
         if entry["type"] == "animation":
             await message.answer_animation(
-                animation=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu,
+                animation=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML",
             )
         elif entry["type"] == "video":
             await message.answer_video(
-                video=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu,
+                video=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML",
             )
         else:
             await message.answer_photo(
-                photo=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu,
+                photo=entry["file_id"], caption=CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML",
             )
     else:
         if message.from_user.id == ADMIN_ID:
@@ -539,7 +539,7 @@ async def show_main_menu(message: Message) -> None:
                 parse_mode="HTML",
             )
         else:
-            await message.answer(CAPTIONS["main"], reply_markup=main_menu)
+            await message.answer(CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML")
 
 
 @dp.message(CommandStart())
@@ -585,7 +585,7 @@ async def menu_handler(callback: CallbackQuery):
                 reply_markup=main_menu,
             )
         else:
-            await callback.message.edit_caption(caption=CAPTIONS["main"], reply_markup=main_menu)
+            await callback.message.edit_caption(caption=CAPTIONS["main"], reply_markup=main_menu, parse_mode="HTML")
         return
 
     if key in SECTIONS:
@@ -657,7 +657,7 @@ async def menu_handler(callback: CallbackQuery):
                         message_ids=ids,
                     )
                 nav_kb = InlineKeyboardMarkup(inline_keyboard=[[
-                    InlineKeyboardButton(text=f"← {CAPTIONS[section]}", callback_data=f"backpost_{section}")
+                    InlineKeyboardButton(text="✦ ← назад", callback_data=f"backpost_{section}")
                 ]])
                 await callback.message.answer(post["title"], reply_markup=nav_kb)
             except Exception as e:
