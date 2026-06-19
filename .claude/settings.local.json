@@ -6,7 +6,10 @@
       "PowerShell(Stop-Process -Name \"python\" -Force -ErrorAction SilentlyContinue)",
       "PowerShell(Get-Process -Name \"py\",\"python\" -ErrorAction SilentlyContinue)",
       "PowerShell(Stop-Process -Name \"py\",\"python\" -Force -ErrorAction SilentlyContinue)",
-      "Bash(grep -E '\\\\.\\(html|css|js|jsx|tsx|ts\\)$')"
+      "Bash(grep -E '\\\\.\\(html|css|js|jsx|tsx|ts\\)$')",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
